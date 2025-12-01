@@ -10,3 +10,4 @@ p_text = soup.find('p').text
 
 print(h1_text)
 print(p_text)
+
