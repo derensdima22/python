@@ -1,3 +1,5 @@
+from simple_term_menu import TerminalMenu
+
 array_name_task = [
     'Квадрат числа. | Enter arg: one',
     'Середнє трьох чисел | Enter arg: two',
@@ -8,78 +10,101 @@ array_name_task = [
     'Виведення числа в стовпчик | Enter arg: seven',
 ]
 
-for index, task in enumerate(array_name_task):
-    print(f"{index + 1}: {task}")
+dist_name_task = {
+    'one': 'Квадрат числа. | Enter arg: one',
+    'two': 'Середнє трьох чисел | Enter arg: two',
+    'three': 'Перетворення хвилин у години | Enter arg: three',
+    'four': 'Розрахунок знижки | Enter arg: four',
+    'five': 'Остання цифра числа | Enter arg: five',
+    'six': 'Периметр прямокутника | Enter arg: six',
+    'seven': 'Виведення числа в стовпчик | Enter arg: seven',
+}
 
-print("")
-number_task = input("choose a task: ")
+try:
+    choices = list(dist_name_task.values())
+    menu = TerminalMenu(choices, title="Choose a task:")
+    index = menu.show()
+    chosen_key = list(dist_name_task.keys())[index]
+except NotImplementedError:
+    for index, task in enumerate(array_name_task):
+        print(f"{index + 1}: {task}")
+
+    print("")
+    chosen_key = input("choose a task: ")
+
+
+
+
+
+def chek_number(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except ValueError:
+            return 'It is not a number.'
+    return wrapper
 
 class Tasks:
+    @chek_number
     def one(self):
-        try:
-            number = float(input("Enter a number: "))
+        number = float(input("Enter a number: "))
 
-            print(f'The square of a number: {number ** number}')
-        except ValueError:
-            print('It is not a number.')
+        return f'The square of a number: {number ** 2}'
 
+    @chek_number
     def two(self):
-        try:
-            enter_numbers = input("Enter numbers separated by a space: ")
-            numbers = 0
-            length_entered_numbers = len(enter_numbers.split(" "))
+        enter_numbers = input("Enter numbers separated by a space: ")
+        numbers = 0
+        length_entered_numbers = len(enter_numbers.split(" "))
 
 
-            for number in enter_numbers.split():
-                numbers += float(number)
+        for number in enter_numbers.split():
+            numbers += float(number)
 
-            print(f'Average of numbers: {numbers/length_entered_numbers}')
-        except ValueError:
-            print('It is not a number.')
+        return f'Average of numbers: {numbers/length_entered_numbers}'
 
+    @chek_number
     def three(self):
         try:
             minutes = int(input("Enter the number of minutes: "))
             hours, minutes_remaining = divmod(minutes, 60)
 
-            print(f"convert minutes to hours: {hours}.{minutes_remaining}")
+            return f"convert minutes to hours: {hours}.{minutes_remaining}"
         except ValueError:
             print('It is not a number.')
 
+    @chek_number
     def four(self):
-        try:
-            price_goods = float(input("Enter price goods: "))
-            discount = float(input("Enter discount: "))
+        price_goods = float(input("Enter price goods: "))
+        discount = float(input("Enter discount: "))
 
-            print(f'discounted price: {price_goods - (price_goods / 100 * discount)}')
-        except ValueError:
-            print('It is not a number.')
+        price_discount = price_goods - (price_goods / 100 * discount)
 
+        return f'discounted price: {price_discount}'
+
+    @chek_number
     def five(self):
-        try:
-            number = int(input("Enter a number: "))
+        number = int(input("Enter a number: "))
 
-            print(f'Last digit: {number % 10}')
-        except ValueError:
-            print('It is not a number.')
+        return f'Last digit: {number % 10}'
 
+    @chek_number
     def six(self):
-        try:
-            length_rectangle = float(input("Enter a length rectangle: "))
-            width_rectangle = float(input("Enter a width rectangle: "))
+        length_rectangle = float(input("Enter a length rectangle: "))
+        width_rectangle = float(input("Enter a width rectangle: "))
 
-            print(f'perimeter rectangle: {2*(length_rectangle + width_rectangle)}')
-        except ValueError:
-            print('It is not a number.')
+        return f'perimeter rectangle: {2*(length_rectangle + width_rectangle)}'
 
+    @chek_number
     def seven(self):
-        try:
-            number = input("Enter a number: ")
+        number = input("Enter a number: ")
 
-            for digit in number:
-                print(digit)
-        except ValueError:
-            print('It is not a number.')
+        result = ""
+        for digit in number:
+            result += f"{int(digit)}\n"
+
+        return result
+
     def default(self):
         return "We do not have this function"
 
@@ -88,4 +113,4 @@ class Tasks:
         return method()
 
 tasks = Tasks()
-tasks.run(number_task)
+print(tasks.run(chosen_key))
